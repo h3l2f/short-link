@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<title>UKN</title>
+
+	<!-- HTML -->
+
+
+	<!-- Custom Styles -->
+	<!--link rel="stylesheet" href="style.css"-->
+</head>
+
+<body>
+	<span id="Message">ukn</span>
+
+<script>
+urlParams = new URLSearchParams(window.location.search);
+
+// Get individual parameter values
+const code = urlParams.get('c');
+
+message = document.getElementById("Message")
+
+fetch('link.json')
+  .then(response => response.json())
+  .then(data => {
+    l = data["link"][code]
+		if (l == null) {
+			message.textContent = "Not found"
+		} else {
+			message.textContent = "Redirecting to " + l;
+			window.location = l
+		}
+  })
+  .catch(error => {
+    console.error('Error fetching JSON:', error);
+  });
+</script>
+</body>
+</html>
