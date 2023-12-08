@@ -30,15 +30,21 @@ def gen():
 @app.route('/gencode', methods=['POST'])
 def gencode():
     link = request.form['link']
-    add = subprocess.run(['python','slink.py','-l',f'{link}'], capture_output=True, text=True)
-    print(f'-l {link}')
-    scode = add.stdout.strip()
-    scode = f'"{scode}"'
-    return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', {scode});window.location = '/scode' </script>"
+    rscode = request.form['rscode']
+    if rscode == "":
+        add = subprocess.run(['python','slink.py','-l',f'{link}'], capture_output=True, text=True)
+        scode = add.stdout.strip()
+        scode = f'"{scode}"'
+        return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', {scode});window.location = '/scode' </script>"
+    else:
+        add = subprocess.run(['python','slink.py','-l',f'{link}','-rsc',f'{rscode}'], capture_output=True,text=True)
+        scode = add.stdout.strip()
+        scode = f'"{scode}"'
+        return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', {scode});window.location = '/scode' </script>"
 
 @app.route('/scode')
 def getscode():
-    return '<meta name="viewport" content="width=device-width">Your SCode is: <span id="scode">None</span> <script>s = document.getElementById("scode");var scode =localStorage.getItem("sc");s.textContent = scode </script>'
+    return '<meta name="viewport" content="width=device-width"><span id="scode">Null</span> <script>s = document.getElementById("scode");var scode =localStorage.getItem("sc");if (scode == "Scode is not available,try again with another Scode!") {s.textContent = scode} else {s.textContent = "Your Scode is: "+scode} </script>'
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1",port="5000",debug=True)
