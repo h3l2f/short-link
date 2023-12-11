@@ -28,9 +28,15 @@ def rankey():
 parser = argparse.ArgumentParser()
 parser.add_argument('-l', type=str)
 parser.add_argument('-rsc', type=str)
+parser.add_argument("-p", type=str)
 args = parser.parse_args()
 link = args.l
 rsc = args.rsc
+spasswd = args.p
+
+if spasswd == None:
+    spasswd=""
+
 if validators.url(link) == True:
     keyword = rankey() if rsc == None else rsc
     try:
@@ -40,7 +46,9 @@ if validators.url(link) == True:
     else:
         print("Scode is not available,try again with another Scode!",end="")
         exit()
-    d["link"][keyword] = link
+    d["link"][keyword] = {}
+    d["link"][keyword]["url"] = link
+    d["link"][keyword]["pass"] = str(spasswd)
     with open("link.json","w") as f:
         json.dump(d,f,indent=4)
 
