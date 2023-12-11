@@ -12,4 +12,4 @@ Requirements module<br>
 
 # Usage
 **Generate page** : /generate <br>
-**Redirect Page** : /?p=(Scode)&pass=(  password if necessary)
+**Redirect Page** : /?p=(Scode)&pass=(password if necessary)
