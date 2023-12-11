@@ -30,7 +30,7 @@ def index():
     with open("link.json","r") as f:
         d = json.load(f)
     if p == None:
-        return f"<meta name='viewport' content='width=device-width'>Not found<br>Using {request.url_root}?p=(SCode)&pass=(password if require)"
+        return f"<meta name='viewport' content='width=device-width'>Not found<br>Using {request.url_root}?p=(SCode)&pass=(password if necessary)"
     else:
         try:
             n = d["link"][p]
@@ -88,10 +88,6 @@ window.location = '/?p='+p+'&pass='+pass;
 }
 </script>
 """
-@app.route("/check")
-def check():
-    pass
-
 
 @app.route('/all-link')
 def run_script():
@@ -109,12 +105,14 @@ def gencode():
     rscode = request.form['rscode']
     p = request.form["spasswd"]
     scode = command(link,rscode,p)
-    scode = f'"{scode}"'
-    return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', {scode});window.location = '/scode' </script>"
+    with open("link.json",'r') as f:
+        d = json.load(f)
+    pwd = d["link"][scode]["pass"]
+    return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', '{scode}');localStorage.setItem('p','{pwd}');window.location = '/scode' </script>"
 
 @app.route('/scode')
 def getscode():
-    return '<meta name="viewport" content="width=device-width"><span id="scode">Null</span> <script>s = document.getElementById("scode");var scode =localStorage.getItem("sc");if (scode == "Scode is not available,try again with another Scode!") {s.textContent = scode} else {s.textContent = "Your Scode is: "+scode} </script>'
+    return '<meta name="viewport" content="width=device-width"><span id="scode">Null</span> <script>s = document.getElementById("scode");var scode =localStorage.getItem("sc");if (scode == "Scode is not available,try again with another Scode!") {s.textContent = scode} else {s.textContent = "Your Scode is: "+scode+" and password is " + localStorage.getItem("p")} </script>'
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1",port="5000",debug=True)
