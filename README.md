@@ -11,5 +11,5 @@ Requirements module<br>
 •Please change /all-link to a # comment line in main.py to avoid Scode disclosure!
 
 # Usage
-**Generate page** : /generate
+**Generate page** : /generate <br>
 **Redirect Page** : /?p=(Scode)&pass=(  password if necessary)
