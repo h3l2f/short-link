@@ -107,7 +107,10 @@ def gencode():
     scode = command(link,rscode,p)
     with open("link.json",'r') as f:
         d = json.load(f)
-    pwd = d["link"][scode]["pass"]
+    if scode == "Scode is not available,try again with another Scode!":
+        pwd = ""
+    else:
+        pwd = d["link"][scode]["pass"]
     return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', '{scode}');localStorage.setItem('p','{pwd}');window.location = '/scode' </script>"
 
 @app.route('/scode')
