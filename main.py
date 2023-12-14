@@ -30,7 +30,7 @@ def index():
     with open("link.json","r") as f:
         d = json.load(f)
     if p == None:
-        return f"<meta name='viewport' content='width=device-width'>Not found<br>Using {request.url_root}?p=(SCode)&pass=(password if necessary)"
+        return f"<meta name='viewport' content='width=device-width'>Not found<br>Using {request.url_root}?p=(SCode)"
     else:
         try:
             n = d["link"][p]
@@ -115,7 +115,31 @@ def gencode():
 
 @app.route('/scode')
 def getscode():
-    return '<meta name="viewport" content="width=device-width"><span id="scode">Null</span> <script>s = document.getElementById("scode");var scode =localStorage.getItem("sc");if (scode == "Scode is not available,try again with another Scode!") {s.textContent = scode} else {s.textContent = "Your Scode is: "+scode+" and password is " + localStorage.getItem("p")} </script>'
+    return '''
+<meta name="viewport" content="width=device-width">
+<span id="scode">Null</span> <span id="passwd"></span> 
+<script>
+s = document.getElementById("scode");
+var scode =localStorage.getItem("sc");
+var pass = localStorage.getItem("p");
+if (scode == "Scode is not available,try again with another Scode!") {
+    s.textContent = scode
+} else {
+    var s1 = document.createElement("b");
+    s1.textContent= scode;
+    s.textContent = "Your Scode is: ";
+    s1.setAttribute("style","color : red;");
+    s.appendChild(s1);
+};
+if (pass=="") {} else {
+    var show_pass = document.getElementById("passwd");
+    show_pass.textContent = "and your password is: ";
+    s2 = document.createElement("b");
+    s2.textContent = pass;
+    s2.setAttribute("style","color : blue;");
+    show_pass.appendChild(s2);
+};
+</script>'''
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1",port="5000",debug=True)

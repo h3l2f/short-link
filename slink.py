@@ -48,7 +48,7 @@ if validators.url(link) == True:
         exit()
     d["link"][keyword] = {}
     d["link"][keyword]["url"] = link
-    d["link"][keyword]["pass"] = str(spasswd)
+    d["link"][keyword]["pass"] = str(spasswd.replace(" ",""))
     with open("link.json","w") as f:
         json.dump(d,f,indent=4)
 
