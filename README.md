@@ -16,8 +16,7 @@ Requirements module<br>
 **Redirect** : /(**scode**)
 
 # Change Log
-•Ver.1.2 :
-**<h2>Big Update</h2>**
+•Ver.1.2 : **Big Update** <br>
 -Now we change slink format from **/?p=(scode)** to **/(scode)<br>**
 -fix bug<br>
 
