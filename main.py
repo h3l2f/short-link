@@ -4,6 +4,8 @@ import json
 import subprocess
 app = Flask(__name__,template_folder='templates')
 
+nmchr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
 def command(p,rscode,spasswd):
     cm = ["python","slink.py","-l",f"{p}"]
     if rscode == "":
@@ -21,16 +23,15 @@ def command(p,rscode,spasswd):
     print(cm)
     return scode
 
-
-
-@app.route("/")
-def index():
-    p = request.args.get('p')
+@app.errorhandler(404)
+def not_found(e):
+    p = request.path
+    p = p.replace("/","")
     pwd = request.args.get("pass")
     with open("link.json","r") as f:
         d = json.load(f)
-    if p == None:
-        return f"<meta name='viewport' content='width=device-width'>Not found<br>Using {request.url_root}?p=(SCode)"
+    if p == "":
+        return f"<meta name='viewport' content='width=device-width'>Not found<br>Use {request.url_root}(SCode)<br>Or use can go to <a href='/manage/generate'>Generate page</a> to get a slink for yourself."
     else:
         try:
             n = d["link"][p]
@@ -80,57 +81,62 @@ function shpw() {
   };
 
 function check() {
-const p = getParameterByName('p');
+const p = window.location.pathname;
 var pass = document.getElementById('checkpass').value;
 if (pass == "") {alert("Please enter the correct password!")} else {
-window.location = '/?p='+p+'&pass='+pass;
+window.location = p+'?pass='+pass;
 }
 }
 </script>
 """
 
-@app.route('/all-link')
+@app.route('/manage/all-link')
 def run_script():
     result = subprocess.run(['python', 'get.py'], capture_output=True, text=True)
     output = result.stdout
     return f"<meta name='viewport' content='width=device-width'>{output}"
 
-@app.route("/generate")
+@app.route("/manage/generate")
 def gen():
     return render_template("generate.html")
 
-@app.route('/gencode', methods=['POST'])
+@app.route('/manage/gencode', methods=['POST'])
 def gencode():
     link = request.form['link']
     rscode = request.form['rscode']
     p = request.form["spasswd"]
-    scode = command(link,rscode,p)
-    with open("link.json",'r') as f:
-        d = json.load(f)
-    if scode == "Scode is not available,try again with another Scode!":
+    if any(chr not in nmchr for chr in rscode):
+        scode = "Incl spt"
         pwd = ""
+        return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', '{scode}');localStorage.setItem('p','{pwd}');window.location = '/manage/scode' </script>"
     else:
-        pwd = d["link"][scode]["pass"]
-    return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', '{scode}');localStorage.setItem('p','{pwd}');window.location = '/scode' </script>"
+        scode = command(link,rscode,p)
+        with open("link.json",'r') as f:
+            d = json.load(f)
+        if scode == "Scode is not available,try again with another Scode!":
+            pwd = ""
+        else:
+            pwd = d["link"][scode]["pass"]
+        return f"<meta name='viewport' content='width=device-width'>Please Wait<br><script>localStorage.setItem('sc', '{scode}');localStorage.setItem('p','{pwd}');window.location = '/manage/scode' </script>"
 
-@app.route('/scode')
+@app.route('/manage/scode')
 def getscode():
     return '''
 <meta name="viewport" content="width=device-width">
-<span id="scode">Null</span> <span id="passwd"></span> 
+<span id="scode">Null</span> <span id="passwd"></span>
 <script>
 s = document.getElementById("scode");
 var scode =localStorage.getItem("sc");
 var pass = localStorage.getItem("p");
 if (scode == "Scode is not available,try again with another Scode!") {
     s.textContent = scode
-} else {
+} else {if (scode == "Incl spt") {s.textContent="Sorry,Scode cannot include spectial character!"} else {
     var s1 = document.createElement("b");
     s1.textContent= scode;
     s.textContent = "Your Scode is: ";
     s1.setAttribute("style","color : red;");
     s.appendChild(s1);
-};
+}};
 if (pass=="") {} else {
     var show_pass = document.getElementById("passwd");
     show_pass.textContent = "and your password is: ";
