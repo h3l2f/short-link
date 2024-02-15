@@ -15,9 +15,9 @@ Requirements module<br>
 **Generate page** : /manage/generate <br>
 **Redirect** : /(**scode**)
 
-#Change Log
+# Change Log
 •Ver.1.2 :
-**<h1>Big Update</h1>**
+**<h2>Big Update</h2>**
 -Now we change slink format from **/?p=(scode)** to **/(scode)<br>**
 -fix bug<br>
 
