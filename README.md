@@ -9,7 +9,8 @@ Requirements module<br>
 **Flask will run on port 5000, but you can change it in main.py**
 
 **WARNING**
-•Please change /manage/all-link to a # comment line in main.py to avoid Scode disclosure!
+•Because of security, the option of show link will be "n" as default.<br>
+But you can change it in get.py file.
 
 # Usage
 **Generate page** : /manage/generate <br>
