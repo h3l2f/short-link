@@ -1,4 +1,7 @@
 # short-link
+[![Github releases](https://img.shields.io/badge/Release-v1.2-blue.svg)](https://github.com/h3l2f/short-link/releases/tag/v1.2)
+[![Demo website](https://img.shields.io/badge/go_to-demo_website-blue)](https://slink.pythonanywhere.com/)
+<br>
 A simple Short link app written in Flask and HTML (non-CSS)
 
 Requirements module<br>
