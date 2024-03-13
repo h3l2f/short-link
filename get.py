@@ -7,7 +7,7 @@ l = list(d["link"].keys())
 #Config can viewer see the original code
 #y = show // n= No
 
-is_showing = "y"
+is_showing = "n"
 
 print(f'total: {len(l)}<br>')
 for i in range(0,len(l)):
