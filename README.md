@@ -9,7 +9,7 @@ Requirements module<br>
 **Flask will run on port 5000, but you can change it in main.py**
 
 **WARNING**
-•Because of security, the option of show link will be "n" as default.<br>
+•Because of security, the option of show link will be set to "n" value as default.<br>
 But you can change it in get.py file.
 
 # Usage
